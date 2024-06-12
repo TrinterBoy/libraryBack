@@ -13,15 +13,15 @@ class BookController {
             const { img, pdf } = req.files;
             let fileName = uuid.v4() + ".jpg"
 
-            const book = await Book.create({ name, author, year, genreId, desc, img: fileName })
-
             try {
                 const newPath = path.resolve(__dirname, '..', './static', `./${ book.id }`);
                 await fs.mkdir(newPath);
-                await pdf.mv(path.resolve(__dirname, '..', './static', `./${ book.id }`, `${ name }.pdf`))
                 await img.mv(path.resolve(__dirname, '..', 'static', fileName))
+                await pdf.mv(path.resolve(__dirname, '..', './static', `./${ book.id }`, `book.pdf`))
             } catch (e) {
+                console.log(e)
             }
+            const book = await Book.create({ name, author, year, genreId, desc, img: fileName })
 
             return res.json(book)
 
